@@ -4,6 +4,8 @@ using BlogPage.Domain.Exceptions;
 using BlogPage.Persistence.Context;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace BlogPage.Tests.Services;
 
@@ -19,8 +21,10 @@ public class CommentServiceTests : IDisposable
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
         
-        _context = new BlogDbContext(options);
-        _commentService = new CommentService(_context);
+        _context = new BlogDbContext(options); 
+        var mockLogger = new Mock<ILogger<CommentService>>();
+
+        _commentService = new CommentService(_context, mockLogger.Object);
         
         SeedTestData();
     }

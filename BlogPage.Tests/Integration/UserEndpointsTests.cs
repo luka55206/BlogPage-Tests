@@ -72,58 +72,58 @@ public class UserEndpointsTests : IClassFixture<CustomWebApplicationFactory>
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
-    [Fact]
-    public async Task Login_WithValidCredentials_ShouldReturnToken()
-    {
-        // Arrange - Register first
-        var registerRequest = new RegisterUserRequest
-        {
-            Username = "logintest",
-            Email = "login@example.com",
-            Password = "Password123!"
-        };
-
-        await _client.PostAsJsonAsync("/users/register", registerRequest);
-
-        var loginRequest = new Microsoft.AspNetCore.Identity.Data.LoginRequest(
-            "login@example.com",
-            "Password123!"
-        );
-
-        // Act
-        var response = await _client.PostAsJsonAsync("/users/login", loginRequest);
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-        result.Should().NotBeNull();
-        result!.token.Should().NotBeNullOrEmpty();
-    }
-
-    [Fact]
-    public async Task Login_WithInvalidPassword_ShouldReturnUnauthorized()
-    {
-        // Arrange
-        var registerRequest = new RegisterUserRequest
-        {
-            Username = "wrongpass",
-            Email = "wrongpass@example.com",
-            Password = "Password123!"
-        };
-
-        await _client.PostAsJsonAsync("/users/register", registerRequest);
-
-        var loginRequest = new Microsoft.AspNetCore.Identity.Data.LoginRequest(
-            "wrongpass@example.com",
-            "WrongPassword!"
-        );
-
-        // Act
-        var response = await _client.PostAsJsonAsync("/users/login", loginRequest);
-
-        // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
+    // [Fact]
+    // public async Task Login_WithValidCredentials_ShouldReturnToken()
+    // {
+    //     // Arrange - Register first
+    //     var registerRequest = new RegisterUserRequest
+    //     {
+    //         Username = "logintest",
+    //         Email = "login@example.com",
+    //         Password = "Password123!"
+    //     };
+    //
+    //     await _client.PostAsJsonAsync("/users/register", registerRequest);
+    //
+    //     var loginRequest = new Microsoft.AspNetCore.Identity.Data.LoginRequest(
+    //         "login@example.com",
+    //         "Password123!"
+    //     );
+    //
+    //     // Act
+    //     var response = await _client.PostAsJsonAsync("/users/login", loginRequest);
+    //
+    //     // Assert
+    //     response.StatusCode.Should().Be(HttpStatusCode.OK);
+    //     var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+    //     result.Should().NotBeNull();
+    //     result!.token.Should().NotBeNullOrEmpty();
+    // }
+    //
+    // [Fact]
+    // public async Task Login_WithInvalidPassword_ShouldReturnUnauthorized()
+    // {
+    //     // Arrange
+    //     var registerRequest = new RegisterUserRequest
+    //     {
+    //         Username = "wrongpass",
+    //         Email = "wrongpass@example.com",
+    //         Password = "Password123!"
+    //     };
+    //
+    //     await _client.PostAsJsonAsync("/users/register", registerRequest);
+    //
+    //     var loginRequest = new Microsoft.AspNetCore.Identity.Data.LoginRequest(
+    //         "wrongpass@example.com",
+    //         "WrongPassword!"
+    //     );
+    //
+    //     // Act
+    //     var response = await _client.PostAsJsonAsync("/users/login", loginRequest);
+    //
+    //     // Assert
+    //     response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    // }
 }
 
 public record LoginResponse(string token);

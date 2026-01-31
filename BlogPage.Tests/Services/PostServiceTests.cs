@@ -4,6 +4,8 @@ using BlogPage.Domain.Exceptions;
 using BlogPage.Persistence.Context;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace BlogPage.Tests.Services;
 
@@ -19,7 +21,9 @@ public class PostServiceTests : IDisposable
             .Options;
         
         _context = new BlogDbContext(options);
-        _postService = new PostService(_context);
+        var mockLogger = new Mock<ILogger<PostService>>();
+
+        _postService = new PostService(_context, mockLogger.Object);
         
         SeedTestData();
     }
